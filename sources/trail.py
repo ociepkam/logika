@@ -34,7 +34,10 @@ class Trial:
         random.shuffle(self.answers)
 
     def generate_wrong_answer(self):
-        number_of_different_lines = random.choice([1, 2])
+        if self.n == 1:
+            number_of_different_lines = 1
+        else:
+            number_of_different_lines = random.choice([1, 2])
         new_lines = self.xor_lines[:]
         for _ in range(number_of_different_lines):
             if random.random() < 0.5:
