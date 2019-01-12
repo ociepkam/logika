@@ -8,4 +8,4 @@ def create_all_pairs(x, y):
     return pairs
 
 
-KEYS = ["z", "x", "c"]
+KEYS = ["left", "down", "right"]

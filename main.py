@@ -41,7 +41,7 @@ def run_trial(n):
                        line_width=config["LINE_WIDTH"], grid_width=config["GRID_WIDTH"],
                        line_color=config["LINE_COLOR"], grid_color=config["GRID_COLOR"])
     stim_time = config['CONST_TIME'] + n * config['LEVEL_TIME']
-    acc = 0
+    acc = None
     rt = -1
     window.callOnFlip(response_clock.reset)
     event.clearEvents()
@@ -57,7 +57,7 @@ def run_trial(n):
         if keys:
             rt = response_clock.getTime()
             resp = KEYS.index(keys[0])
-            acc = 1 if trial.answers[resp].name == "correct" else -1
+            acc = 1 if trial.answers[resp].name == "correct" else 0
             break
 
     help_line.setAutoDraw(False)
@@ -76,7 +76,8 @@ window = visual.Window(SCREEN_RES, fullscr=True, monitor='testMonitor', units='p
 FRAMES_PER_SEC = get_frame_rate(window)
 mouse = event.Mouse(visible=False)
 
-help_text = "Zostają linie będące wyłącznie na jednej z dwóch matryc"
+help_text = "Elementy, które pojawiły się wyłącznie w jednym z dwóch górnych kwadratów"
+
 help_line = visual.TextStim(win=window, antialias=True, font=u'Arial',
                             text=help_text, height=config['TEXT_SIZE'],
                             wrapWidth=SCREEN_RES[0], color=u'black',
@@ -89,7 +90,13 @@ response_clock = core.Clock()
 
 # TRAINING
 # show_info(window, join('.', 'messages', "instruction1.txt"), text_size=config['TEXT_SIZE'], screen_width=SCREEN_RES[0])
-show_image(window, 'instruction.png', SCREEN_RES)
+show_image(window, 'instruction.png', SCREEN_RES)   #SCREEN_RES
+show_image(window, 'instruction_example.png', SCREEN_RES)
+show_image(window, 'instruction_example2.png', SCREEN_RES)
+
+pos_feedb = visual.TextStim(window, text=u'Poprawna odpowied\u017A', color='black', height=40)
+neg_feedb = visual.TextStim(window, text=u'Niepoprawna odpowied\u017A', color='black', height=40)
+no_feedb = visual.TextStim(window, text=u'Nie udzieli\u0142e\u015B odpowiedzi', color='black', height=40)
 
 i = 1
 for elem in config['TRAINING_TRIALS']:
@@ -98,10 +105,20 @@ for elem in config['TRAINING_TRIALS']:
         acc, rt, stim_time, n = run_trial(n=elem['level'])
         RESULTS.append([i, 0, acc, rt, stim_time, n, 0, 0])
         i += 1
-
+    ### FEEDBACK
+        if acc == 1:
+            feedb_msg = pos_feedb
+        elif acc == 0:
+            feedb_msg = neg_feedb
+        else:
+            feedb_msg = no_feedb
+        for _ in range(100):
+            feedb_msg.draw()
+            check_exit()
+            window.flip()
 # EXPERIMENT
-show_info(window, join('.', 'messages', "instruction2.txt"), text_size=config['TEXT_SIZE'], screen_width=SCREEN_RES[0])
-
+# show_info(window, join('.', 'messages', "instruction2.txt"), text_size=config['TEXT_SIZE'], screen_width=SCREEN_RES[0])
+show_image(window, 'instruction2.png', SCREEN_RES)
 
 experiment = NUpNDown(start_val=config['START_LEVEL'], max_revs=config['MAX_REVS'],
                       min_level=config["MIN_LEVEL"], max_level=config['MAX_LEVEL'])
@@ -119,8 +136,10 @@ for i, soa in enumerate(experiment, i):
     else:
         rev_count_val = '-'
 
-    RESULTS.append([config['TRAINING_TRIALS'] + i, 1, acc, rt, stim_time, n, reversal, rev_count_val])
+    RESULTS.append([i,1, acc, rt, stim_time, n, reversal, rev_count_val]) #config['TRAINING_TRIALS'] + i,
     experiment.set_corr(acc)
 
+    if rev_count_val == config['MAX_REVS']:
+        break
 
 show_info(window, join('.', 'messages', "end.txt"), text_size=config['TEXT_SIZE'], screen_width=SCREEN_RES[0])

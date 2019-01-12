@@ -1,7 +1,7 @@
-TRAINING_TRIALS: [{level: 1, n_trails: 1}, {level: 2, n_trails: 1}]
-START_LEVEL: 2
+TRAINING_TRIALS: [{level: 1, n_trails: 4}, {level: 2, n_trails: 2}]
+START_LEVEL: 1
 MAX_REVS: 6
-MAX_TRIALS: 70
+MAX_TRIALS: 50
 MIN_LEVEL: 1
 MAX_LEVEL: 10
 
@@ -9,24 +9,24 @@ MATRIX_Y_SIZE: 4
 MATRIX_X_SIZE: 4
 N_ANSWERS: 3
 
-# time in secunds
-CONST_TIME: 3
-LEVEL_TIME: 3
-JITTER_TIME: 0.5
+# time in seconds
+CONST_TIME: 14
+LEVEL_TIME: 0.33
+JITTER_TIME: 2
 
 # visual parameters
 TEXT_SIZE: 28
-MATRIX_OFFSET: 200
+MATRIX_OFFSET: 160
 LINE_LEN: 30
 MOVE_MAIN_Y: 0
-MOVE_ANSWERS_Y: -200
-LINE_WIDTH: 3.5
+MOVE_ANSWERS_Y: -160
+LINE_WIDTH: 5
 GRID_WIDTH: 2
 LINE_COLOR: 'black'
-GRID_COLOR: 'lightgrey'
+GRID_COLOR: 'grey'
 
 # clock
 ## show clock n second before trial end
-SHOW_CLOCK: 3
-CLOCK_POS: [400, 400]
-CLOCK_SIZE: 70
+SHOW_CLOCK: 4
+CLOCK_POS: [0, 200]
+CLOCK_SIZE: 160
